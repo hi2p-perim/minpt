@@ -394,7 +394,7 @@ Compatible with lens description file of [pbrt-v3](https://github.com/mmp/pbrt-v
 
 Example scenes can be obtained from [Morgan McGuire's Computer Graphics Archive](http://casual-effects.com/data/). Slight modification of `.mtl` files might be needed to obtain appropriate images.
 
-<!-->
+<!--
 ### Tips
 #### Converting images
 #### Deciding camera parameters
