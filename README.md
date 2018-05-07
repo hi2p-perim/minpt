@@ -10,7 +10,7 @@
 - 300 lines, 80 columns of C++ code
 - No library dependency except for standard libraries and OpenMP
 - Triangle mesh support
-- OBJ model support, including MLT files (partial)
+- OBJ model support, including MTL files (partial)
 - Acceleration structure with SAHBVH
 - Parallel rendering support via OpenMP
 - Parallel BVH construction
