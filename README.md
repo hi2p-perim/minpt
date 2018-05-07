@@ -1,6 +1,6 @@
 # minpt: A path tracer in 300 lines of C++
 
-![Teaser](/images/teaser.png)
+![Teaser](images/teaser.png)
 
 **minpt** is a path tracer. The entire code is written with 300 lines of code in C++, without *any* dependencies except for standard libraries and OpenMP. This project is inspired and motivated by great [smallpt](http://www.kevinbeason.com/smallpt/) path tracer by Kevin Beason, which can generate beautiful image of Cornell Box only with 100 lines of code. The purpose of this project is to answer a question - "what I can do if we are allowed to add a few times more codes than smallpt, with the power of modern standard libraries of C++". This is what I did. I tried to introduce various features which we can often find in various rendering systems, within three times more code than smallpt - 300 lines of code. 
 
