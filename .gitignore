@@ -1,0 +1,21 @@
+# OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+# Temporary files
+*.swp
+*.pyc
+
+# Project files
+[Bb]uild*/
+[Rr]esults/
+misc/
+resources/
+experimental/
+/external/
+example
+dist*/
+.idea/
+
+# vscode
+.vscode/*
