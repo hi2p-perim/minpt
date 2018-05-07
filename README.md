@@ -412,8 +412,6 @@ Example scenes can be obtained from [Morgan McGuire's Computer Graphics Archive]
 - Parallel BVH build
   - Simple producer-consumer design
   - Blocking queue
-  - *VS-only*: Mixed horizontal/vertical work sharing [Wald 2007]
-    - Utilizes parallel sort for shallow nodes
 - Environment light
   - Image-based importance sampling [Colbert et al. 2010]
 - Realistic camera [Kolb et al. 1995] [Steinert et al. 2011]
