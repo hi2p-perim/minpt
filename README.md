@@ -1,6 +1,7 @@
 # minpt: A path tracer in 300 lines of C++
 
-![Teaser](images/teaser.jpg)
+![Teaser1](images/teaser1.jpg)
+![Teaser2](images/teaser2.jpg)
 
 **minpt** is a path tracer. The entire code is written with 300 lines of code in C++, without *any* dependencies except for standard libraries and OpenMP. This project is inspired and motivated by great [smallpt](http://www.kevinbeason.com/smallpt/) path tracer by Kevin Beason, which can generate beautiful image of Cornell Box only with 100 lines of code. The purpose of this project is to answer a question - "what I can do if we are allowed to add a few times more codes than smallpt, with the power of modern standard libraries of C++". This is what I did. I tried to introduce various features which we can often find in various rendering systems, within three times more code than smallpt - 300 lines of code. 
 
@@ -360,7 +361,7 @@ $ ./minpt \
 ```
 - General arguments
   - `scene_path`: Input path to `.obj` file
-  - `envmap_path`: Input path to `.pmf` file for environment map ("": black background)
+  - `envmap_path`: Input path to `.pfm` file for environment map ("": black background)
   - `lensfile_path`: Input path to lens file ("": use pinhole camera)
   - `output_path`: Output path to rendered image
   - `spp`: Number of samples per pixel
@@ -380,25 +381,93 @@ $ ./minpt \
 
 #### Image file
 
-Minpt only supports binary `.ppm` format (P6) as input textures, and `.pfm` format as environment maps. The rendered images are also generated with `.pfm` format. To check the rendered images, you want to use tools capable of viewing `.pmf` files, such as [PCG HDRITools](https://bitbucket.org/edgarv/hdritools) or [HDRView](https://bitbucket.org/wkjarosz/hdrview).
+Minpt only supports binary `.ppm` format (P6) as input textures, and `.pfm` format as environment maps. The rendered images are also generated with `.pfm` format. To check the rendered images, you want to use tools capable of viewing `.pfm` files, such as [PCG HDRITools](https://bitbucket.org/edgarv/hdritools) or [HDRView](https://bitbucket.org/wkjarosz/hdrview).
 
-<!--#### OBJ file (.obj)-->
+#### OBJ file (.obj)
 
-<!--#### OBJ material file (.mtl)-->
+Triangle and quad meshes are supported.
+
+#### OBJ material file (.mtl)
+
+Minpt uses `illum` parameter to select the material type:
+
+- `illum=7`: Fresnel reflection, refraction BSDF
+- `illum=5`: Perfect mirror BRDF
+- otherwise: Mixtured Lambertian and Cook-Torrance BRDF
+
+Anisotropy of GGX normal distribution can be controlled via `aniso` parameter.
 
 #### Lens description file
 
-Compatible with lens description file of [pbrt-v3](https://github.com/mmp/pbrt-v3).
+As an input to the realistic camera, minpt requires a *lens description file*, describing the configuration of the lens system to be simulated. We used the same format referred in Fig.1 of [Kolb et al. 1995]. The file is compatible with lens description file of [pbrt-v3](https://github.com/mmp/pbrt-v3). For instance, the following data is `wide.22mm.dat` in [pbrt-v3 scene repository](http://pbrt.org/scenes-v3.html).
+
+```
+35.98738  1.21638 1.54  23.716
+11.69718  9.9957  1     17.996
+13.08714  5.12622 1.772 12.364
+-22.63294 1.76924 1.617 9.812
+71.05802  0.8184  1     9.152
+0         2.27766 0     8.756
+-9.58584  2.43254 1.617 8.184
+-11.28864 0.11506 1     9.152
+-166.7765 3.09606 1.713 10.648
+-7.5911   1.32682 1.805 11.44
+-16.7662  3.98068 1     12.276
+-7.70286  1.21638 1.617 13.42
+-11.97328 0       1     17.996
+```
 
 ### Examples
 
-Example scenes can be obtained from [Morgan McGuire's Computer Graphics Archive](http://casual-effects.com/data/). Slight modification of `.mtl` files might be needed to obtain appropriate images.
+Example scenes can be obtained from [Morgan McGuire's Computer Graphics Archive](http://casual-effects.com/data/). Slight modification of `.mtl` files and conversion of image files to `.ppm` are needed to obtain the rendered images.
 
-<!--
+#### Teaser 1 (`fireplace_room`)
+
+```bash
+$ ./minpt \
+    ./fireplace_room/fireplace_room.obj "" ./wide.22mm.dat \
+    result.pfm \
+    1000 20 0 1920 1080 \
+    5.101118 1.083746 -2.756308 4.167568 1.078925 -2.397892 \
+    43.001194 3 35 10
+```
+
+#### Teaser 2 (`rungholt`)
+
+The environment map is converted from `flower_road_4k.hdr` in [HDRI Haven](https://hdrihaven.com/hdri/?h=flower_road).
+```bash
+$ ./minpt \
+    ./rungholt/rungholt.obj ./flower_road_4k.pfm ./wide.22mm.dat \
+    result.pfm \
+    1000 20 0 1920 1080 \
+    243.523193 155.362595 172.186203 242.806686 154.837311 171.727173 \
+    43.273157 100 35 10
+```
+
+
 ### Tips
-#### Converting images
-#### Deciding camera parameters
--->
+
+#### Configuring camera parameters
+
+The following snippet can be used to extract (a part of) camera parameters using Blender. When the realistic camera is enabled, minpt prints effective vertical FoV which can be used to match the image with the image using pinhole camera.
+
+```python
+import bpy
+import mathutils
+from math import pi
+import os 
+scene = bpy.context.scene
+camera = bpy.data.objects["Camera"]
+m = camera.matrix_world.copy()
+m = mathutils.Matrix.Rotation(-pi/2,4,'X')*m
+m.transpose()
+p = mathutils.Vector(m[3][0:3])
+e = p-mathutils.Vector(m[2][0:3])
+fov = bpy.data.cameras["Camera"].angle_y*180/pi
+print("%d %d %f %f %f %f %f %f %f" % (
+  scene.render.resolution_x,scene.render.resolution_y,
+  p[0],p[1],p[2],e[0],e[1],e[2],fov))
+```
 
 ### Details
 
