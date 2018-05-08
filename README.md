@@ -354,7 +354,7 @@ All command line arguments are positional and required.
 ```bash
 $ ./minpt \
     scene_path envmap_path lensfile_path output_path \
-    spp max_path_length image_width image_height \
+    spp max_path_length envmap_rotation image_width image_height \
     camera_pos_x camera_pos_y camera_pos_z \
     camera_lookat_pos_x camera_lookat_pos_y camera_lookat_pos_z \
     vertical_fov focus_distance sensor_diagonal_length sensor_sensitivity
@@ -366,10 +366,12 @@ $ ./minpt \
   - `output_path`: Output path to rendered image
   - `spp`: Number of samples per pixel
   - `max_path_length`: Maximum path length (=number of bounces+1)
+  - `envmap_rotation`: Rotation angle of the environment map around up vector
   - `image_width` `image_height`: Output image resolution
 - Camera related arguments
   - `camera_pos_{x,y,z}`: Camera position
   - `camera_lookat_pos_{x,y,z}`: Look-at position of the camera
+    - Up vector is fixed to (0,1,0)
   - Pinhole camera specific arguments
     - `vertical_fov`: Vertical field of view
   - Realistic camera specific arguments
