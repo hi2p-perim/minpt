@@ -432,9 +432,44 @@ $ ./minpt \
     43.001194 3 35 10
 ```
 
+Modification to the `.mtl` file:
+
+```bash
+$ diff fireplace_room.mtl fireplace_room_orig.mtl
+19c19
+< Ns 10
+---
+> Ns 5
+32c32
+< Ks 0.2 0.2 0.2
+---
+> Ks 0.1 0.1 0.1
+41,42c41,42
+< Ks 0.4 0.4 0.4
+< Ns 50
+---
+> Ks 0.02 0.02 0.02
+> Ns 10.00
+51c51
+< Ni 1.5
+---
+> Ni 1.00
+70c70
+< illum 5
+---
+> illum 3
+123,124c123,124
+< Ks 0.2 0.2 0.2
+< Ns 30
+---
+> Ks 0.04 0.04 0.04
+> Ns 0.06
+```
+
 #### Teaser 2 (`rungholt`)
 
-The environment map is converted from `flower_road_4k.hdr` in [HDRI Haven](https://hdrihaven.com/hdri/?h=flower_road).
+The environment map is converted from `flower_road_4k.hdr` in [HDRI Haven](https://hdrihaven.com/hdri/?h=flower_road). This scene requires approximately 4GB of free memory.
+
 ```bash
 $ ./minpt \
     ./rungholt/rungholt.obj ./flower_road_4k.pfm ./wide.22mm.dat \
