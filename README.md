@@ -423,7 +423,16 @@ As an input to the realistic camera, minpt requires a *lens description file*, d
 
 Example scenes can be obtained from [Morgan McGuire's Computer Graphics Archive](http://casual-effects.com/data/). Slight modification of `.mtl` files and conversion of image files to `.ppm` are needed to obtain the rendered images.
 
-#### Teaser 1 (`fireplace_room`)
+#### `CornellBox-Sphere`
+
+```bash
+$ ./minpt \
+    ./CornellBox/CornellBox-Sphere.obj "" "" result.pfm \
+    100 20 0 1920 1080 \
+    0 1 5 0 1 0 30 0 0 0
+```
+
+#### `fireplace_room` (Teaser 1)
 
 ```bash
 $ ./minpt \
@@ -468,7 +477,7 @@ $ diff fireplace_room.mtl fireplace_room_orig.mtl
 > Ns 0.06
 ```
 
-#### Teaser 2 (`rungholt`)
+#### `rungholt` (Teaser 2)
 
 The environment map is converted from `flower_road_4k.hdr` in [HDRI Haven](https://hdrihaven.com/hdri/?h=flower_road). This scene requires approximately 4GB of free memory.
 
