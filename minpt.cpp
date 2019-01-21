@@ -250,15 +250,15 @@ struct Scene{Geo G; Obj E; vector<Obj> os; vector<unique_ptr<Tex>> ts;
     V c=G.ps[fs[fi+2].p]; trs.emplace_back(a,b,c,I(oi),I(fi));}}
   I nt=I(trs.size()); q.push({0,0,nt}); ns.assign(2*nt-1,{}); ti.assign(nt,0);
   iota(ti.begin(),ti.end(),0); mutex mu; condition_variable cv;
-  atomic<I> pr=0; I nn=1; bool done=0; auto process=[&](){while(!done){
-   auto [ni,s,e]=[&]()->tuple<I,I,I>{unique_lock<mutex> lk(mu);
-    if(q.empty()){cv.wait(lk,[&](){return done||!q.empty();});}
+  atomic<I> pr=0; I nn=1; bool done=0; using ul=unique_lock<mutex>;
+  auto process=[&](){while(!done){auto [ni,s,e]=[&]()->tuple<I,I,I>{ul lk(mu);
+    if(!done&&q.empty()){cv.wait(lk,[&](){return done||!q.empty();});}
     if(done) return{}; auto v=q.front(); q.pop(); return v;}();
    if(done) break; N& n=ns[ni]; for(I i=s;i<e;i++) n.b=merge(n.b,trs[ti[i]].b);
-   auto st=[&,s=s,e=e](I ax){auto cmp=[&](I i1, I i2){
-    return trs[i1].c[ax]<trs[i2].c[ax];}; sort(&ti[s],&ti[e-1]+1,cmp);};
+   auto st=[&,s=s,e=e](I ax){sort(&ti[s],&ti[e-1]+1,[&](I i1, I i2){
+    return trs[i1].c[ax]<trs[i2].c[ax];});}; F b=Inf; I bi,ba;
    auto lf=[&,s=s,e=e](){n.leaf=1; n.s=s; n.e=e; pr+=e-s;if(pr==I(trs.size())){
-    done=1;cv.notify_all();}}; if(e-s<2){lf();continue;} F b=Inf; I bi,ba;
+    ul lk(mu);done=1;cv.notify_all();}}; if(e-s<2){lf();continue;}
    for(I a=0;a<3;a++){thread_local vector<F> l(nt+1),r(nt+1); st(a); B bl,br;
     for(I i=0;i<=e-s;i++){I j=e-s-i; l[i]=bl.sa()*i; r[j]=br.sa()*i;
     bl=i<e-s?merge(bl,trs[ti[s+i]].b):bl;br=j>0?merge(br,trs[ti[s+j-1]].b):br;}
